@@ -23,11 +23,16 @@ function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function active(){return state.items.filter(x=>!x.archived)}
 function first(){return (state.profile.name||"Hassan Saber").trim().split(/\s+/)[0]}
 function nav(){return `<header class="topnav"><div class="navinner">
-<button class="navbtn ${page==="home"?"active":""}" data-page="home">⌂<br>Home</button>
-<button class="navbtn ${page==="later"?"active":""}" data-page="later">☰<br>Later</button>
-<button class="add" id="quickAdd" type="button" aria-label="Add item">+</button>
-<button class="navbtn ${page==="history"?"active":""}" data-page="history">↺<br>History</button>
-<button class="navbtn ${page==="profile"?"active":""}" data-page="profile">○<br>Profile</button>
+<button class="navbtn ${page==="home"?"active":""}" data-page="home" aria-label="Home">
+<svg class="navicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5H15v-6H9v6H3.5a.5.5 0 0 1-.5-.5z"/></svg><span>Home</span></button>
+<button class="navbtn ${page==="later"?"active":""}" data-page="later" aria-label="Later">
+<svg class="navicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"/></svg><span>Later</span></button>
+<button class="add" id="quickAdd" type="button" aria-label="Add item">
+<svg class="plusicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+<button class="navbtn ${page==="history"?"active":""}" data-page="history" aria-label="History">
+<svg class="navicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5v5h5"/><path d="M5.6 9A7.5 7.5 0 1 1 4.8 15"/><path d="M12 8v4l2.8 1.7"/></svg><span>History</span></button>
+<button class="navbtn ${page==="profile"?"active":""}" data-page="profile" aria-label="Profile">
+<svg class="navicon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5.5 20c.8-4 3-6 6.5-6s5.7 2 6.5 6"/></svg><span>Profile</span></button>
 </div></header>`}
 function hero(){return `<section class="hero"><div><div class="logo">LATER <span class="arabic-brand">بعدين</span></div><h1>Good morning, ${esc(first())}</h1><p>One place for the things you want to come back to.</p></div></section>`}
 function card(x){

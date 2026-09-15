@@ -73,3 +73,50 @@ img{max-width:100%}
   .add{width:46px;height:46px}
   .actions{grid-template-columns:1fr}
 }
+
+/* Navigation icon refresh */
+.navbtn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  border-radius:12px;
+  transition:background .18s ease,color .18s ease,transform .18s ease;
+}
+.navbtn:hover{background:rgba(20,65,115,.07)}
+.navbtn:active{transform:scale(.97)}
+.navicon{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.navbtn.active .navicon{stroke-width:2.25}
+.navbtn span{line-height:1;font-weight:500}
+.navbtn.active span{font-weight:700}
+.add{
+  display:grid;
+  place-items:center;
+  box-shadow:0 7px 18px rgba(14,55,101,.22);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+.add:hover{transform:translateY(-1px);box-shadow:0 9px 22px rgba(14,55,101,.28)}
+.add:active{transform:scale(.96)}
+.plusicon{
+  width:26px;
+  height:26px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2.4;
+  stroke-linecap:round;
+}
+@media(max-width:520px){
+  .navicon{width:20px;height:20px}
+  .navbtn{gap:4px;border-radius:10px}
+  .navbtn span{font-size:.72rem}
+  .plusicon{width:25px;height:25px}
+}

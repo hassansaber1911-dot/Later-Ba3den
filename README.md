@@ -27,3 +27,7 @@ Item titles, notes, images, and other user-entered content are not sent as analy
 https://hassansaber1911-dot.github.io/Later-Ba3den/
 
 The prototype currently stores user-created items in browser Local Storage.
+
+
+### UI update
+Navigation icons were replaced with a consistent SVG icon set for cleaner rendering on desktop and mobile.
