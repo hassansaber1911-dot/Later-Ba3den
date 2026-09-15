@@ -31,3 +31,5 @@ The prototype currently stores user-created items in browser Local Storage.
 
 ### UI update
 Navigation icons were replaced with a consistent SVG icon set for cleaner rendering on desktop and mobile.
+
+- First-time users are asked for their name before entering the app; the name is stored locally and remains editable from Profile.

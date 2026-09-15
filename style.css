@@ -120,3 +120,49 @@ img{max-width:100%}
   .navbtn span{font-size:.72rem}
   .plusicon{width:25px;height:25px}
 }
+
+
+/* First-run profile setup */
+.first-run-backdrop{
+  z-index:2000;
+  background:rgba(10,32,58,.52);
+  backdrop-filter:blur(5px);
+}
+.first-run-modal{
+  width:min(430px,calc(100% - 28px));
+  border-radius:22px;
+}
+.first-run-body{
+  padding:32px 28px;
+  text-align:center;
+}
+.welcome-mark{
+  width:54px;
+  height:54px;
+  margin:0 auto 18px;
+  border-radius:16px;
+  display:grid;
+  place-items:center;
+  background:var(--blue);
+  color:#fff;
+  font-size:24px;
+  font-weight:800;
+}
+.first-run-body h2{margin-bottom:8px}
+.first-run-body .form-group{
+  text-align:left;
+  margin-top:24px;
+}
+.first-run-save{
+  width:100%;
+  margin-top:18px;
+}
+@media(max-width:520px){
+  .first-run-backdrop{align-items:center;padding:14px}
+  .first-run-modal{
+    width:100%;
+    border-radius:20px;
+    max-height:none;
+  }
+  .first-run-body{padding:28px 20px}
+}

@@ -2,7 +2,7 @@ const KEY="later_phase1_2";
 const CATS={Watch:"🎬",Read:"📚",Connect:"💬",Work:"💼",Buy:"🛍️",Learn:"🎓",Visit:"📍",Other:"✨"};
 const statuses=["Pending","In Progress","Done","Not Interested"];
 const today=(plus=0)=>{const d=new Date();d.setDate(d.getDate()+plus);return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
-function fresh(){return {profile:{name:"Hassan Saber"},items:[
+function fresh(){return {profile:{name:""},items:[
 {id:uid(),title:"Prepare pre meeting notes",category:"Work",status:"Pending",notes:"Review notes and key discussion points.",date:today(),time:"",archived:false,createdAt:new Date().toISOString()},
 {id:uid(),title:"Product Analytics course",category:"Learn",status:"In Progress",notes:"Continue the next module.",date:"",time:"",archived:false,createdAt:new Date().toISOString()},
 {id:uid(),title:"Visit AlUla",category:"Visit",status:"Pending",notes:"Check the best season.",date:"",time:"",archived:false,createdAt:new Date().toISOString()},
@@ -72,6 +72,44 @@ function content(){
  return `<main class="content"><h1 class="page">Profile</h1><div class="profile"><div class="avatar">${esc(ini)}</div><form id="profileForm" class="form"><div class="field"><label>Your name</label><input name="name" required value="${esc(state.profile.name)}"></div><button class="btn primary" type="submit">Save edit</button></form></div></main>`
 }
 function filterBar(fs){return `<div class="filters">${fs.map(f=>`<button type="button" class="filter ${filter===f?"active":""}" data-filter="${f}">${f}</button>`).join("")}</div>`}
+
+function ensureProfileName(){
+  if((state.profile?.name || "").trim()) return true;
+
+  modalRoot.innerHTML=`<div class="modal-backdrop first-run-backdrop">
+    <div class="modal first-run-modal">
+      <div class="modal-body first-run-body">
+        <div class="welcome-mark">L</div>
+        <h2>Welcome to Later | بعدين</h2>
+        <p class="muted">Before we start, what should we call you?</p>
+        <form id="firstRunNameForm">
+          <div class="form-group">
+            <label>Your name</label>
+            <input id="firstRunName" type="text" maxlength="50" placeholder="Enter your name" autocomplete="name" autofocus required>
+          </div>
+          <button class="btn primary first-run-save" type="submit">Continue</button>
+        </form>
+      </div>
+    </div>
+  </div>`;
+
+  const form=document.querySelector("#firstRunNameForm");
+  const input=document.querySelector("#firstRunName");
+  setTimeout(()=>input?.focus(),50);
+
+  form.onsubmit=(e)=>{
+    e.preventDefault();
+    const name=input.value.trim();
+    if(!name) return;
+    state.profile={...(state.profile||{}),name};
+    localStorage.setItem(KEY,JSON.stringify(state));
+    track("profile_created");
+    modalRoot.innerHTML="";
+    render();
+  };
+  return false;
+}
+
 function render(){document.getElementById("app").innerHTML=nav()+content();bind()}
 function bind(){
  document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;filter="All";track("section_view",{section:page});render()}));
