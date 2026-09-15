@@ -68,7 +68,7 @@ function content(){
  if(page==="home") return hero()+`<main class="content">${section("Today",a.filter(x=>x.date===t&&!["Done","Not Interested"].includes(x.status)))}${section("Continue",a.filter(x=>x.status==="In Progress"))}${section("Upcoming",a.filter(x=>x.date&&x.date>t&&!["Done","Not Interested"].includes(x.status)))}${section("Someday",a.filter(x=>!x.date&&!["Done","Not Interested"].includes(x.status)))}</main>`;
  if(page==="later"){const fs=["All","Pending","In Progress"];const actionable=a.filter(x=>x.status==="Pending"||x.status==="In Progress");const list=filter==="All"?actionable:actionable.filter(x=>x.status===filter);return `<main class="content"><h1 class="page">Later</h1><p class="sub">Things you still want or need to do.</p>${filterBar(fs)}${list.length?`<div class="grid">${list.map(card).join("")}</div>`:`<div class="empty">Nothing left to do here.</div>`}</main>`}
  if(page==="history"){const fs=["All","Archived","Done","In Progress","Pending","Not Interested"];let list=state.items;if(filter==="Archived")list=list.filter(x=>x.archived);else if(filter!=="All")list=list.filter(x=>!x.archived&&x.status===filter);return `<main class="content"><h1 class="page">History</h1>${filterBar(fs)}${list.length?`<div class="grid">${list.map(card).join("")}</div>`:`<div class="empty">No items in this history filter.</div>`}</main>`}
- const ini=(state.profile.name||"HS").split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase();
+ const ini=(state.profile.name||"").split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase();
  return `<main class="content"><h1 class="page">Profile</h1><div class="profile"><div class="avatar">${esc(ini)}</div><form id="profileForm" class="form"><div class="field"><label>Your name</label><input name="name" required value="${esc(state.profile.name)}"></div><button class="btn primary" type="submit">Save edit</button></form></div></main>`
 }
 function filterBar(fs){return `<div class="filters">${fs.map(f=>`<button type="button" class="filter ${filter===f?"active":""}" data-filter="${f}">${f}</button>`).join("")}</div>`}
@@ -76,41 +76,57 @@ function filterBar(fs){return `<div class="filters">${fs.map(f=>`<button type="b
 function ensureProfileName(){
   if((state.profile?.name || "").trim()) return true;
 
-  modalRoot.innerHTML=`<div class="modal-backdrop first-run-backdrop">
-    <div class="modal first-run-modal">
-      <div class="modal-body first-run-body">
-        <div class="welcome-mark">L</div>
-        <h2>Welcome to Later | بعدين</h2>
-        <p class="muted">Before we start, what should we call you?</p>
-        <form id="firstRunNameForm">
-          <div class="form-group">
-            <label>Your name</label>
-            <input id="firstRunName" type="text" maxlength="50" placeholder="Enter your name" autocomplete="name" autofocus required>
-          </div>
-          <button class="btn primary first-run-save" type="submit">Continue</button>
-        </form>
+  const modal=$("#modal");
+  const content=$("#modalContent");
+  const close=$("#closeModal");
+  const backdrop=$("#backdrop");
+
+  content.innerHTML=`<div class="first-run-body">
+    <div class="welcome-mark">L</div>
+    <h2>Welcome to Later | بعدين</h2>
+    <p class="muted">Before we start, what should we call you?</p>
+    <form id="firstRunNameForm" class="form">
+      <div class="field">
+        <label>Your name</label>
+        <input id="firstRunName" type="text" maxlength="50" placeholder="Enter your name" autocomplete="name" required>
       </div>
-    </div>
+      <button class="btn primary first-run-save" type="submit">Continue</button>
+    </form>
   </div>`;
 
-  const form=document.querySelector("#firstRunNameForm");
-  const input=document.querySelector("#firstRunName");
-  setTimeout(()=>input?.focus(),50);
+  modal.classList.remove("hidden");
+  modal.classList.add("first-run-mode");
+  close.style.display="none";
+  backdrop.style.pointerEvents="none";
 
-  form.onsubmit=(e)=>{
+  const input=$("#firstRunName");
+  setTimeout(()=>input?.focus(),80);
+
+  $("#firstRunNameForm").addEventListener("submit",e=>{
     e.preventDefault();
     const name=input.value.trim();
     if(!name) return;
     state.profile={...(state.profile||{}),name};
     localStorage.setItem(KEY,JSON.stringify(state));
     track("profile_created");
-    modalRoot.innerHTML="";
+    modal.classList.add("hidden");
+    modal.classList.remove("first-run-mode");
+    close.style.display="";
+    backdrop.style.pointerEvents="";
     render();
-  };
+  });
+
   return false;
 }
 
-function render(){document.getElementById("app").innerHTML=nav()+content();bind()}
+function showToast(message){
+ let toast=document.getElementById("saveToast");
+ if(!toast){toast=document.createElement("div");toast.id="saveToast";toast.className="save-toast";document.body.appendChild(toast)}
+ toast.textContent=message;toast.classList.add("show");
+ clearTimeout(window.__laterToastTimer);
+ window.__laterToastTimer=setTimeout(()=>toast.classList.remove("show"),2200);
+}
+function render(){if(!ensureProfileName())return;document.getElementById("app").innerHTML=nav()+content();bind()}
 function bind(){
  document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;filter="All";track("section_view",{section:page});render()}));
  $("#quickAdd").addEventListener("click",()=>openForm());
@@ -120,7 +136,7 @@ function bind(){
  document.querySelectorAll("[data-notinterested]").forEach(b=>b.addEventListener("click",()=>{const x=find(b.dataset.notinterested);x.status="Not Interested";track("item_not_interested",{category:x.category});save()}));
  document.querySelectorAll("[data-archive]").forEach(b=>b.addEventListener("click",()=>{find(b.dataset.archive).archived=true;save()}));
  document.querySelectorAll("[data-restore]").forEach(b=>b.addEventListener("click",()=>{find(b.dataset.restore).archived=false;save()}));
- $("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();state.profile.name=new FormData(e.currentTarget).get("name").trim()||"";save()});
+ $("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();state.profile.name=new FormData(e.currentTarget).get("name").trim()||"";save();showToast("Changes saved");});
 }
 function find(id){return state.items.find(x=>x.id===id)}
 function opts(arr,selected){return arr.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v)}</option>`).join("")}

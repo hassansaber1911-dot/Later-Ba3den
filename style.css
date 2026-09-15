@@ -166,3 +166,41 @@ img{max-width:100%}
   }
   .first-run-body{padding:28px 20px}
 }
+
+
+/* Locked first-entry name onboarding */
+.modal.first-run-mode .sheet{
+  width:min(430px,calc(100% - 28px));
+  border-radius:22px;
+}
+.modal.first-run-mode .backdrop{
+  background:rgba(10,32,58,.58);
+  backdrop-filter:blur(5px);
+}
+.first-run-body{
+  padding:12px 6px 8px;
+  text-align:center;
+}
+.first-run-body .field{
+  text-align:left;
+  margin-top:22px;
+}
+.first-run-save{
+  width:100%;
+  margin-top:8px;
+}
+@media(max-width:520px){
+  .modal.first-run-mode{
+    align-items:center;
+  }
+  .modal.first-run-mode .sheet{
+    width:calc(100% - 28px);
+    max-height:none;
+    border-radius:20px;
+    margin:auto;
+  }
+}
+
+.save-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);z-index:3000;padding:11px 16px;border-radius:12px;background:#163b66;color:#fff;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(15,35,60,.22);opacity:0;pointer-events:none;transition:.2s}
+.save-toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){.save-toast{bottom:20px;width:calc(100% - 32px);text-align:center}}
