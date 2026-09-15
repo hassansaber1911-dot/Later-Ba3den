@@ -3,7 +3,7 @@ const CATS={Watch:"🎬",Read:"📚",Connect:"💬",Work:"💼",Buy:"🛍️",Le
 const statuses=["Pending","In Progress","Done","Not Interested"];
 const today=(plus=0)=>{const d=new Date();d.setDate(d.getDate()+plus);return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
 function fresh(){return {profile:{name:"Hassan Saber"},items:[
-{id:uid(),title:"Prepare WMS demo notes",category:"Work",status:"Pending",notes:"Review discovery questions.",date:today(),time:"",archived:false,createdAt:new Date().toISOString()},
+{id:uid(),title:"Prepare pre meeting notes",category:"Work",status:"Pending",notes:"Review notes and key discussion points.",date:today(),time:"",archived:false,createdAt:new Date().toISOString()},
 {id:uid(),title:"Product Analytics course",category:"Learn",status:"In Progress",notes:"Continue the next module.",date:"",time:"",archived:false,createdAt:new Date().toISOString()},
 {id:uid(),title:"Visit AlUla",category:"Visit",status:"Pending",notes:"Check the best season.",date:"",time:"",archived:false,createdAt:new Date().toISOString()},
 {id:uid(),title:"Call Ahmed about Product role",category:"Connect",status:"Pending",notes:"Ask about next steps.",date:today(3),time:"19:00",archived:false,createdAt:new Date().toISOString()}
@@ -12,6 +12,12 @@ function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2
 let state;try{state=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){state=fresh()}
 let page="home",filter="All";
 const $=s=>document.querySelector(s);
+function track(eventName, params={}){
+  if(typeof window.gtag==="function"){
+    window.gtag("event", eventName, params);
+  }
+}
+
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function active(){return state.items.filter(x=>!x.archived)}
@@ -63,12 +69,12 @@ function content(){
 function filterBar(fs){return `<div class="filters">${fs.map(f=>`<button type="button" class="filter ${filter===f?"active":""}" data-filter="${f}">${f}</button>`).join("")}</div>`}
 function render(){document.getElementById("app").innerHTML=nav()+content();bind()}
 function bind(){
- document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;filter="All";render()}));
+ document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;filter="All";track("section_view",{section:page});render()}));
  $("#quickAdd").addEventListener("click",()=>openForm());
  document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.filter;render()}));
  document.querySelectorAll("[data-edit]").forEach(b=>b.addEventListener("click",()=>openForm(b.dataset.edit)));
- document.querySelectorAll("[data-done]").forEach(b=>b.addEventListener("click",()=>{const x=find(b.dataset.done);x.status="Done";save()}));
- document.querySelectorAll("[data-notinterested]").forEach(b=>b.addEventListener("click",()=>{const x=find(b.dataset.notinterested);x.status="Not Interested";save()}));
+ document.querySelectorAll("[data-done]").forEach(b=>b.addEventListener("click",()=>{const x=find(b.dataset.done);x.status="Done";track("item_completed",{category:x.category});save()}));
+ document.querySelectorAll("[data-notinterested]").forEach(b=>b.addEventListener("click",()=>{const x=find(b.dataset.notinterested);x.status="Not Interested";track("item_not_interested",{category:x.category});save()}));
  document.querySelectorAll("[data-archive]").forEach(b=>b.addEventListener("click",()=>{find(b.dataset.archive).archived=true;save()}));
  document.querySelectorAll("[data-restore]").forEach(b=>b.addEventListener("click",()=>{find(b.dataset.restore).archived=false;save()}));
  $("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();state.profile.name=new FormData(e.currentTarget).get("name").trim()||"Hassan Saber";save()});
@@ -99,8 +105,13 @@ function openForm(id=""){
      image=await fileToDataURL(file);
    }
    const data={title:f.get("title").trim(),category:f.get("category"),status:f.get("status"),notes:f.get("notes").trim(),date:f.get("date"),time:f.get("time"),image};
-   if(id)Object.assign(find(id),data);
-   else state.items.unshift({id:uid(),...data,archived:false,createdAt:new Date().toISOString()});
+   if(id){
+     Object.assign(find(id),data);
+     track("item_edited",{category:data.category,status:data.status});
+   } else {
+     state.items.unshift({id:uid(),...data,archived:false,createdAt:new Date().toISOString()});
+     track("item_created",{category:data.category,has_date:Boolean(data.date),has_image:Boolean(data.image)});
+   }
    closeModal();save()
  })
 }
