@@ -204,3 +204,20 @@ img{max-width:100%}
 .save-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);z-index:3000;padding:11px 16px;border-radius:12px;background:#163b66;color:#fff;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(15,35,60,.22);opacity:0;pointer-events:none;transition:.2s}
 .save-toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:520px){.save-toast{bottom:20px;width:calc(100% - 32px);text-align:center}}
+
+
+/* === Later profile onboarding & save confirmation === */
+.modal.first-run-mode{display:flex;align-items:center;justify-content:center}
+.modal.first-run-mode .sheet{width:min(430px,calc(100% - 28px));border-radius:22px}
+.modal.first-run-mode .backdrop{background:rgba(10,32,58,.58);backdrop-filter:blur(5px)}
+.first-run-body{padding:18px 8px 10px;text-align:center}
+.welcome-mark{width:54px;height:54px;margin:0 auto 18px;border-radius:16px;display:grid;place-items:center;background:#163b66;color:#fff;font-size:24px;font-weight:800}
+.first-run-body .field{text-align:left;margin-top:22px}
+.first-run-save{width:100%;margin-top:10px}
+
+.save-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,18px);z-index:9999;padding:11px 16px;border-radius:12px;background:#163b66;color:#fff;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(15,35,60,.22);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.save-toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:520px){
+ .modal.first-run-mode .sheet{width:calc(100% - 28px);max-height:none;border-radius:20px;margin:auto}
+ .save-toast{bottom:20px;width:calc(100% - 32px);text-align:center}
+}

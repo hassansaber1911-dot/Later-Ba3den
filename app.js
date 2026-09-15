@@ -1,4 +1,4 @@
-const KEY="later_ba3den_v2";
+const KEY="later_ba3den_profile_v3";
 const CATS={Watch:"🎬",Read:"📚",Connect:"💬",Work:"💼",Buy:"🛍️",Learn:"🎓",Visit:"📍",Other:"✨"};
 const statuses=["Pending","In Progress","Done","Not Interested"];
 const today=(plus=0)=>{const d=new Date();d.setDate(d.getDate()+plus);return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
@@ -73,60 +73,80 @@ function content(){
 }
 function filterBar(fs){return `<div class="filters">${fs.map(f=>`<button type="button" class="filter ${filter===f?"active":""}" data-filter="${f}">${f}</button>`).join("")}</div>`}
 
+
+
+
+
+function showToast(message){
+  let toast=document.getElementById("saveToast");
+  if(!toast){
+    toast=document.createElement("div");
+    toast.id="saveToast";
+    toast.className="save-toast";
+    document.body.appendChild(toast);
+  }
+  toast.textContent=message;
+  requestAnimationFrame(()=>toast.classList.add("show"));
+  clearTimeout(window.__laterToastTimer);
+  window.__laterToastTimer=setTimeout(()=>toast.classList.remove("show"),2200);
+}
+
 function ensureProfileName(){
-  if((state.profile?.name || "").trim()) return true;
+  const name=(state.profile && state.profile.name ? state.profile.name : "").trim();
+  if(name) return true;
 
-  const modal=$("#modal");
-  const content=$("#modalContent");
-  const close=$("#closeModal");
-  const backdrop=$("#backdrop");
+  const modal=document.getElementById("modal");
+  const content=document.getElementById("modalContent");
+  const close=document.getElementById("closeModal");
+  const backdrop=document.getElementById("backdrop");
 
-  content.innerHTML=`<div class="first-run-body">
-    <div class="welcome-mark">L</div>
-    <h2>Welcome to Later | بعدين</h2>
-    <p class="muted">Before we start, what should we call you?</p>
-    <form id="firstRunNameForm" class="form">
-      <div class="field">
-        <label>Your name</label>
-        <input id="firstRunName" type="text" maxlength="50" placeholder="Enter your name" autocomplete="name" required>
-      </div>
-      <button class="btn primary first-run-save" type="submit">Continue</button>
-    </form>
-  </div>`;
+  if(!modal || !content){
+    console.error("Later onboarding: modal elements missing");
+    return false;
+  }
+
+  content.innerHTML=`
+    <div class="first-run-body">
+      <div class="welcome-mark">L</div>
+      <h2>Welcome to Later | بعدين</h2>
+      <p class="muted">Before we start, what should we call you?</p>
+      <form id="firstRunNameForm" class="form">
+        <div class="field">
+          <label for="firstRunName">Your name</label>
+          <input id="firstRunName" name="name" type="text" maxlength="50"
+                 placeholder="Enter your name" autocomplete="name" required>
+        </div>
+        <button class="btn primary first-run-save" type="submit">Continue</button>
+      </form>
+    </div>`;
 
   modal.classList.remove("hidden");
   modal.classList.add("first-run-mode");
-  close.style.display="none";
-  backdrop.style.pointerEvents="none";
+  if(close) close.style.display="none";
+  if(backdrop) backdrop.style.pointerEvents="none";
 
-  const input=$("#firstRunName");
-  setTimeout(()=>input?.focus(),80);
+  const input=document.getElementById("firstRunName");
+  setTimeout(()=>input && input.focus(),50);
 
-  $("#firstRunNameForm").addEventListener("submit",e=>{
+  const form=document.getElementById("firstRunNameForm");
+  form.addEventListener("submit",function(e){
     e.preventDefault();
-    const name=input.value.trim();
-    if(!name) return;
-    state.profile={...(state.profile||{}),name};
-    localStorage.setItem(KEY,JSON.stringify(state));
+    const newName=input.value.trim();
+    if(!newName) return;
+    state.profile={...(state.profile||{}),name:newName};
+    save();
     track("profile_created");
     modal.classList.add("hidden");
     modal.classList.remove("first-run-mode");
-    close.style.display="";
-    backdrop.style.pointerEvents="";
+    if(close) close.style.display="";
+    if(backdrop) backdrop.style.pointerEvents="";
     render();
   });
 
   return false;
 }
 
-function showToast(message){
- let toast=document.getElementById("saveToast");
- if(!toast){toast=document.createElement("div");toast.id="saveToast";toast.className="save-toast";document.body.appendChild(toast)}
- toast.textContent=message;toast.classList.add("show");
- clearTimeout(window.__laterToastTimer);
- window.__laterToastTimer=setTimeout(()=>toast.classList.remove("show"),2200);
-}
-function render(){if(!ensureProfileName())return;document.getElementById("app").innerHTML=nav()+content();bind()}
+function render(){if(!ensureProfileName())return;if(!ensureProfileName())return;document.getElementById("app").innerHTML=nav()+content();bind()}
 function bind(){
  document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;filter="All";track("section_view",{section:page});render()}));
  $("#quickAdd").addEventListener("click",()=>openForm());
