@@ -1,4 +1,4 @@
-const KEY="later_phase1_2";
+const KEY="later_ba3den_v2";
 const CATS={Watch:"🎬",Read:"📚",Connect:"💬",Work:"💼",Buy:"🛍️",Learn:"🎓",Visit:"📍",Other:"✨"};
 const statuses=["Pending","In Progress","Done","Not Interested"];
 const today=(plus=0)=>{const d=new Date();d.setDate(d.getDate()+plus);return new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10)};
@@ -21,7 +21,7 @@ function track(eventName, params={}){
 const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function active(){return state.items.filter(x=>!x.archived)}
-function first(){return (state.profile.name||"Hassan Saber").trim().split(/\s+/)[0]}
+function first(){return (state.profile.name||"").trim().split(/\s+/)[0]}
 function nav(){return `<header class="topnav"><div class="navinner">
 <button class="navbtn ${page==="home"?"active":""}" data-page="home" aria-label="Home">
 <svg class="navicon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5H15v-6H9v6H3.5a.5.5 0 0 1-.5-.5z"/></svg><span>Home</span></button>
@@ -120,7 +120,7 @@ function bind(){
  document.querySelectorAll("[data-notinterested]").forEach(b=>b.addEventListener("click",()=>{const x=find(b.dataset.notinterested);x.status="Not Interested";track("item_not_interested",{category:x.category});save()}));
  document.querySelectorAll("[data-archive]").forEach(b=>b.addEventListener("click",()=>{find(b.dataset.archive).archived=true;save()}));
  document.querySelectorAll("[data-restore]").forEach(b=>b.addEventListener("click",()=>{find(b.dataset.restore).archived=false;save()}));
- $("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();state.profile.name=new FormData(e.currentTarget).get("name").trim()||"Hassan Saber";save()});
+ $("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();state.profile.name=new FormData(e.currentTarget).get("name").trim()||"";save()});
 }
 function find(id){return state.items.find(x=>x.id===id)}
 function opts(arr,selected){return arr.map(v=>`<option value="${esc(v)}" ${v===selected?"selected":""}>${esc(v)}</option>`).join("")}

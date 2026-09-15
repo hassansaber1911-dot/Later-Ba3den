@@ -33,3 +33,6 @@ The prototype currently stores user-created items in browser Local Storage.
 Navigation icons were replaced with a consistent SVG icon set for cleaner rendering on desktop and mobile.
 
 - First-time users are asked for their name before entering the app; the name is stored locally and remains editable from Profile.
+
+### Onboarding fix
+This version uses a fresh Local Storage namespace so every visitor sees the name onboarding popup on first entry, including browsers that had data from older prototype versions.
