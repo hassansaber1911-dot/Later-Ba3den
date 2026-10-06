@@ -1,38 +1,59 @@
 # Later | بعدين
 
-A functional product prototype for capturing the things we keep saying we'll do later.
+**A mobile-first personal backlog for the things you keep saying you'll do later.**
+
+[Try the live prototype](https://hassansaber1911-dot.github.io/Later-Ba3den/)
+
+## Product Overview
+Ideas, places, courses, purchases, people to contact, and small tasks often end up scattered across notes, screenshots, messages, and memory. Later gives them one lightweight home without forcing every thought into a traditional task-management workflow.
+
+## The Problem
+Not everything worth remembering is a dated task. People need somewhere to capture an intention quickly, return to it later, and decide whether to continue, complete, archive, or drop it.
+
+## Core Experience
+- Name onboarding and editable profile
+- Quick-add with optional dates, times, notes, and images
+- Categories for Watch, Read, Connect, Work, Buy, Learn, Visit, and Other
+- Pending, In Progress, Done, and Not Interested states
+- Home sections for Today, Continue, Upcoming, and Someday
+- Focused Later view for actionable items
+- Full History with filters
+- Archive and restore flows
+- Mobile-first responsive navigation
 
 ## Product Logic
-- **Later** = Pending + In Progress
-- **History** = everything added across all statuses
-- Dates, notes and images are optional
-- Mobile-first responsive UI
+**Later = Pending + In Progress.**
+
+**History = everything captured across statuses.**
+
+Dates are optional by design. An idea can live in Someday without inventing a deadline simply to satisfy the system.
+
+## Product Decisions
+**Capture first, organize lightly.** The app asks only for context that helps the user return to an item.
+
+**Not Interested is a real outcome.** Users can deliberately close an intention without pretending it was completed.
+
+**History preserves context.** Completed, dropped, and archived items remain reviewable instead of disappearing.
 
 ## Product Analytics
-This version includes Google Analytics 4 for privacy-conscious product usage measurement.
+Privacy-conscious GA4 events measure item creation, editing, completion, dismissal, archive/restore, quick-add usage, and section views. User-entered titles, notes, and images are not sent as analytics event parameters.
 
-Tracked events include:
-- item_created
-- item_edited
-- item_completed
-- item_not_interested
-- item_archived
-- item_restored
-- quick_add_opened
-- section_view
+## Tech Stack
+HTML, CSS, vanilla JavaScript, browser Local Storage, Google Analytics 4, and GitHub Pages.
 
-Item titles, notes, images, and other user-entered content are not sent as analytics event parameters.
+## Current Scope
+The prototype stores data locally in the browser. It currently has no account sync, cloud backup, reminders, or cross-device access.
 
-## Live Prototype
-https://hassansaber1911-dot.github.io/Later-Ba3den/
+## Roadmap Opportunities
+- Authentication and cloud sync
+- Reminders and notifications
+- Sharing selected items
+- Search and richer filters
+- Arabic-first localization
+- PWA/offline installation
+- Smart resurfacing of forgotten items
 
-The prototype currently stores user-created items in browser Local Storage.
+## About This Project
+Later explores how a lightweight product can sit between a notes app and a task manager: enough structure to come back to something, without making every intention feel like work.
 
-
-### UI update
-Navigation icons were replaced with a consistent SVG icon set for cleaner rendering on desktop and mobile.
-
-- First-time users are asked for their name before entering the app; the name is stored locally and remains editable from Profile.
-
-### Onboarding fix
-This version uses a fresh Local Storage namespace so every visitor sees the name onboarding popup on first entry, including browsers that had data from older prototype versions.
+**Built by Hassan Mohamed Saber**
