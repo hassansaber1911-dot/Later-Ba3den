@@ -1,59 +1,46 @@
+![Later | بعدين — personal backlog](assets/cover.svg)
+
 # Later | بعدين
 
-**A mobile-first personal backlog for the things you keep saying you'll do later.**
+**One place for the things you want to come back to.**
 
-[Try the live prototype](https://hassansaber1911-dot.github.io/Later-Ba3den/)
+[**Live Demo →**](https://hassansaber1911-dot.github.io/Later-Ba3den/)
 
-## Product Overview
-Ideas, places, courses, purchases, people to contact, and small tasks often end up scattered across notes, screenshots, messages, and memory. Later gives them one lightweight home without forcing every thought into a traditional task-management workflow.
+## Product Preview
 
-## The Problem
-Not everything worth remembering is a dated task. People need somewhere to capture an intention quickly, return to it later, and decide whether to continue, complete, archive, or drop it.
+Real screenshots from the live application with its sample items and a test entry.
 
-## Core Experience
-- Name onboarding and editable profile
-- Quick-add with optional dates, times, notes, and images
-- Categories for Watch, Read, Connect, Work, Buy, Learn, Visit, and Other
-- Pending, In Progress, Done, and Not Interested states
-- Home sections for Today, Continue, Upcoming, and Someday
-- Focused Later view for actionable items
-- Full History with filters
-- Archive and restore flows
-- Mobile-first responsive navigation
+### Resurface intentions by context
+![Later home: Today, Continue and Upcoming](assets/home.jpg)
 
-## Product Logic
-**Later = Pending + In Progress.**
+### Keep the outcome and the history
+![Later history with a completed reading item](assets/history.jpg)
 
-**History = everything captured across statuses.**
+## The problem
+Courses, purchases, places and small intentions get scattered across screenshots and notes. They need a home without becoming an overdue task list.
 
-Dates are optional by design. An idea can live in Someday without inventing a deadline simply to satisfy the system.
+## MVP and user flow
+Capture an item → add light context → revisit it in Today, Continue, Upcoming or Someday → progress, complete or dismiss it → review History.
 
-## Product Decisions
-**Capture first, organize lightly.** The app asks only for context that helps the user return to an item.
+- Quick capture with category, notes and optional date/time or image.
+- Pending, In Progress, Done and Not Interested states.
+- Home, actionable Later list and filtered History.
+- Archive and restore.
 
-**Not Interested is a real outcome.** Users can deliberately close an intention without pretending it was completed.
+## Business rules and product decisions
+**Later = Pending + In Progress.** History preserves captured items across outcomes.
 
-**History preserves context.** Completed, dropped, and archived items remain reviewable instead of disappearing.
+**Dates are optional.** A someday intention does not need an invented deadline.
 
-## Product Analytics
-Privacy-conscious GA4 events measure item creation, editing, completion, dismissal, archive/restore, quick-add usage, and section views. User-entered titles, notes, and images are not sent as analytics event parameters.
+**Not Interested is a valid outcome.** Closing an intention should not require pretending it was completed.
 
-## Tech Stack
-HTML, CSS, vanilla JavaScript, browser Local Storage, Google Analytics 4, and GitHub Pages.
+**Capture first.** The MVP collects enough context to return to an item without a heavy planning process.
 
-## Current Scope
-The prototype stores data locally in the browser. It currently has no account sync, cloud backup, reminders, or cross-device access.
+## Measurement
+GA4 events cover capture, editing, completion, dismissal, archive/restore and section views. Titles, notes and images are excluded from analytics parameters. No retention or user-growth results are claimed.
 
-## Roadmap Opportunities
-- Authentication and cloud sync
-- Reminders and notifications
-- Sharing selected items
-- Search and richer filters
-- Arabic-first localization
-- PWA/offline installation
-- Smart resurfacing of forgotten items
+## Validation and current limits
+Live flow checked on 6 October 2026: name onboarding, quick-add of an undated reading item, visibility in Later, completion and visibility as Done in History. Data is browser-local. There is no cloud sync, reminder delivery or cross-device access.
 
-## About This Project
-Later explores how a lightweight product can sit between a notes app and a task manager: enough structure to come back to something, without making every intention feel like work.
-
-**Built by Hassan Mohamed Saber**
+---
+Built by **Hassan Mohamed Saber** · Product portfolio
